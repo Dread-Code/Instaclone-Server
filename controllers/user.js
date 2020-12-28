@@ -56,7 +56,16 @@ async function login(input) {
     }
 }
 
+async function getUser(id,username) {
+    let user = null
+    if (id)  user = await User.findById(id);
+    if(username) user = await User.findOne({ username })
+    if(!user) throw new Error("El usuario no existe")
+    return user
+}
+
 module.exports = {
     register,
-    login
+    login,
+    getUser
 }
