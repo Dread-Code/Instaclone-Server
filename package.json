@@ -10,10 +10,16 @@
   },
   "dependencies": {
     "apollo-server": "^2.19.1",
+    "aws-sdk": "^2.842.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
+    "fs-capacitor": "^6.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.8",
     "nodemon": "^2.0.6"
+  },
+  "resolutions": {
+    "fs-capacitor": "^6.2.0",
+    "graphql-upload": "^11.0.0"
   }
 }
