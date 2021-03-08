@@ -6,7 +6,7 @@
   "author": "Lucas Ospina A.",
   "license": "ISC",
   "scripts": {
-    "dev": "nodemon ./index.js"
+    "dev": "nodemon ./server1.js"
   },
   "dependencies": {
     "apollo-server": "^2.19.1",

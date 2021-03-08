@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require("../models/user");
 const bcryptjs = require('bcryptjs')
 const jwt = require("jsonwebtoken")
 const awsUploadImage = require('../utils/aws-upload-image')
@@ -88,9 +88,21 @@ async function updateAvatar(file, { user }){
     }
 }
 
+async function deleteAvatar(ctx){
+    const { id } = ctx
+    try {
+        await User.findOneAndUpdate(id, {avatar: ""})
+        return true
+    } catch (error) {
+        console.log(error)
+        return false
+    }
+}
+
 module.exports = {
     register,
     login,
     getUser,
-    updateAvatar
+    updateAvatar,
+    deleteAvatar
 }
