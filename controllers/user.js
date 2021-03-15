@@ -99,10 +99,34 @@ async function deleteAvatar(ctx){
     }
 }
 
+async function updateUser(input, ctx){
+    const { id } = ctx.user
+    const { currentPassword, newPassword} = input
+    try {
+        if (currentPassword && newPassword) {
+            //Cambiar contraseña
+            const userFound = await User.findById(id)
+            const passwordSuccess = await bcryptjs.compare(currentPassword, userFound.password)
+            console.log(passwordSuccess)
+            if(!passwordSuccess) throw new Error("Contraseña incorrecta")
+            const salt = await bcryptjs.genSaltSync(10)
+            const newPasswordCrypt = await bcryptjs.hash(newPassword, salt)
+            await User.findByIdAndUpdate(id, {password: newPasswordCrypt})
+        }else{
+            await User.findOneAndUpdate(id, input)
+        }
+
+        return true
+    }catch (error) {
+        return false
+    }
+}
+
 module.exports = {
     register,
     login,
     getUser,
     updateAvatar,
-    deleteAvatar
+    deleteAvatar,
+    updateUser
 }
