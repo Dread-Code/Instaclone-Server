@@ -113,6 +113,7 @@ async function updateUser(input, ctx){
             const newPasswordCrypt = await bcryptjs.hash(newPassword, salt)
             await User.findByIdAndUpdate(id, {password: newPasswordCrypt})
         }else{
+            console.log(input)
             await User.findOneAndUpdate(id, input)
         }
 
@@ -122,11 +123,19 @@ async function updateUser(input, ctx){
     }
 }
 
+async function search(search){
+    const users = await User.find({
+        name: { $regex: search, $options: "i"}
+    })
+    return users;
+}
+
 module.exports = {
     register,
     login,
     getUser,
     updateAvatar,
     deleteAvatar,
-    updateUser
+    updateUser,
+    search
 }
