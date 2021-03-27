@@ -7,8 +7,8 @@ const resolver = {
         getUser: (_, { id, username } ) => userController.getUser(id, username),
         search: (_, { search }) => userController.search(search),
         //Follow
-        isFollow:(_, { username }, ctx) => followController.isFollow(username, ctx)
-
+        isFollow:(_, { username }, ctx) => followController.isFollow(username, ctx),
+        getFollowers:(_, { username }) => followController.getFollowers(username)
     },
     Mutation:{
         //User
