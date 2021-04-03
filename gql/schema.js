@@ -13,6 +13,11 @@ const typeDefs = gql`
         createdAt: String
     }
 
+    type FollowerGetIt {
+        followers: [User]
+        follow: String
+    }
+
     type Token {
         token: String
     }
@@ -51,7 +56,8 @@ const typeDefs = gql`
 
         #Follow
         isFollow( username: String!): Boolean
-        getFollowers(username: String!): [User]
+        getFollowers(username: String!): FollowerGetIt
+        getFollows( username: String!): [User]
 
     }
 
@@ -66,6 +72,10 @@ const typeDefs = gql`
         #follow
         follow(username: String!): Boolean
         unFollow(username: String!): Boolean
+    }
+
+    type Subscription {
+        newFollower(username: String): FollowerGetIt
     }
 `
 

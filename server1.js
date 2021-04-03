@@ -22,7 +22,11 @@ function server() {
     const serverApollo = new ApolloServer({
         typeDefs,
         resolvers,
-        context: ({req}) => {
+        context: ({req, connection }) => {
+            if (connection) {
+                // check connection for metadata
+                return connection.context;
+               } else {
             const token = req.headers.authorization
             if (token) {    
                 try {
@@ -40,6 +44,7 @@ function server() {
                     throw new Error("Token invalido")
                 }
             }
+        }
         }
     })
 

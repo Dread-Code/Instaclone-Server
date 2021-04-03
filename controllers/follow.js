@@ -1,9 +1,7 @@
 const Follow = require("../models/follow");
 const User = require("../models/user");
-const bcryptjs = require('bcryptjs')
-const jwt = require("jsonwebtoken")
 
-async function follow(username, ctx) {
+async function follow(username, ctx, pubSub, NEW_FOLLOWER) {
 
     const userFound = await User.findOne({ username})
     if (!userFound) throw new Error("Usuario no encontrado")
@@ -14,6 +12,8 @@ async function follow(username, ctx) {
             follow: userFound._id
         })
         follow.save()
+        const followers = await getFollowers(userFound.username)
+        pubSub.publish(NEW_FOLLOWER, {newFollower: followers })
         return true
     } catch (error) {
         console.log(error)
@@ -35,7 +35,7 @@ async function isFollow(username, ctx) {
     return false
 }
 
-async function unFollow(username, ctx){
+async function unFollow(username, ctx, pubSub, NEW_FOLLOWER){
     const userFound = await User.findOne({ username})
     if (!userFound) throw new Error("Usuario no encontrado")
 
@@ -44,6 +44,8 @@ async function unFollow(username, ctx){
     .equals(userFound._id)
 
     if (unFollow) {
+        const followers = await getFollowers(userFound.username)
+        pubSub.publish(NEW_FOLLOWER, {newFollower: followers })
         return true
     }
 
@@ -51,18 +53,34 @@ async function unFollow(username, ctx){
 }
 
 async function getFollowers(username){
-
     const { _id } = await User.findOne({ username })
     const followers = await Follow.find({follow: _id}).populate("idUser")
-
-    const followersList = []
-
-    for await (const data of followers) {
-        followersList.push(data.idUser)
+    let followersList = []
+    
+    if(followers.length === 0){
+        return{follow: username}
+    } else {
+        
+        for await (const data of followers) {
+            followersList.push(data.idUser)
+        }
+        return { followers: followersList, follow: username};
     }
 
+}
 
-    return followersList;
+async function getFollows( username ) {
+    const { _id } = await User.findOne({ username })
+    const follows = await Follow.find({idUser: _id}).populate("follow")
+
+    let followsArray = []
+
+    for await (const data of follows){
+        followsArray.push(data.follow)
+    }
+
+    return followsArray
+
 }
 
 module.exports = {
@@ -70,4 +88,5 @@ module.exports = {
     isFollow,
     unFollow,
     getFollowers,
+    getFollows,
 }
