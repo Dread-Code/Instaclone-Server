@@ -6,7 +6,8 @@
   "author": "Lucas Ospina A.",
   "license": "ISC",
   "scripts": {
-    "dev": "nodemon ./server1.js"
+    "dev": "nodemon ./server1.js",
+    "preinstall": "npx npm-force-resolutions"
   },
   "dependencies": {
     "apollo-server": "^2.19.1",
@@ -16,7 +17,8 @@
     "fs-capacitor": "^6.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.8",
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "uuid": "^8.3.2"
   },
   "resolutions": {
     "fs-capacitor": "^6.2.0",

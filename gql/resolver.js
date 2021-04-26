@@ -2,6 +2,8 @@ const { PubSub, withFilter } = require("apollo-server")
 const { NEW_FOLLOWER } = require("./tags")
 const userController = require('../controllers/user')
 const followController = require('../controllers/follow')
+const publicationController = require('../controllers/publication')
+
 
 
 const pubSub = new PubSub()
@@ -26,7 +28,10 @@ const resolver = {
 
         // FOllow
         follow: (_, { username }, ctx) => followController.follow(username, ctx, pubSub, NEW_FOLLOWER),
-        unFollow: (_, {username }, ctx) => followController.unFollow(username, ctx, pubSub, NEW_FOLLOWER)
+        unFollow: (_, {username }, ctx) => followController.unFollow(username, ctx, pubSub, NEW_FOLLOWER),
+
+        //Publication
+        publish: (_, { file }, ctx) => publicationController.publish(file, ctx)
     }, 
     Subscription:{
         newFollower: {
