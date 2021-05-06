@@ -32,6 +32,14 @@ const typeDefs = gql`
         urlFile: String
     }
 
+    type Publication{
+        id: ID,
+        idUser: ID,
+        file: String,
+        typeFile: String,
+        createdAt: String
+    }
+
     input UserInput {
         name: String! 
         username: String!
@@ -63,6 +71,9 @@ const typeDefs = gql`
         isFollow( username: String!): Boolean
         getFollowers(username: String!): FollowerGetIt
         getFollows( username: String!): [User]
+
+        #Publication
+        getPublications(username: String): [Publication]
 
     }
 

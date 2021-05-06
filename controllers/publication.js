@@ -1,4 +1,5 @@
 const Publication = require("../models/publication")
+const User = require("../models/user")
 const awsUploadImage = require("../utils/aws-upload-image")
 const {v4: uuidv4} = require("uuid")
 
@@ -34,7 +35,18 @@ async function publish(file, { user }) {
     
 }
 
+async function getPublications(username){
+
+    const {_id} = await User.findOne({ username })
+    if(!_id) throw new Error("Usuario no encontrado.")
+
+    const publicationList = await Publication.find({idUser: _id}).sort({ createdAt: -1})
+    
+    return publicationList
+}
+
 
 module.exports = {
-    publish
+    publish,
+    getPublications
 }
