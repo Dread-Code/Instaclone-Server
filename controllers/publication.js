@@ -2,9 +2,11 @@ const Publication = require("../models/publication")
 const User = require("../models/user")
 const awsUploadImage = require("../utils/aws-upload-image")
 const {v4: uuidv4} = require("uuid")
+const { NEW_PUBLICATION } = require("../gql/tags")
 
-async function publish(file, { user }) {
-    const { id } = user
+
+async function publish(file, { user }, pubSub) {
+    const { id, username } = user
     const { createReadStream, mimetype} = await file
     const extension = mimetype.split("/")[1]
     const fileName = `publication/${uuidv4()}.${extension}`
@@ -20,6 +22,8 @@ async function publish(file, { user }) {
         })
         publication.save()
 
+        let publications = await getPublications(username)
+        pubSub.publish(NEW_PUBLICATION,{newPublications: publications})
         return {
             status: true,
             urlFile: Location
@@ -42,7 +46,7 @@ async function getPublications(username){
 
     const publicationList = await Publication.find({idUser: _id}).sort({ createdAt: -1})
     
-    return publicationList
+    return {publications:publicationList, username}
 }
 
 

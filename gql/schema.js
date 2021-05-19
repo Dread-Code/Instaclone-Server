@@ -18,6 +18,11 @@ const typeDefs = gql`
         follow: String
     }
 
+    type PublicationsGetiT{
+        publications: [Publication]
+        username: String
+    }
+
     type Token {
         token: String
     }
@@ -73,7 +78,7 @@ const typeDefs = gql`
         getFollows( username: String!): [User]
 
         #Publication
-        getPublications(username: String): [Publication]
+        getPublications(username: String): PublicationsGetiT
 
     }
 
@@ -94,8 +99,9 @@ const typeDefs = gql`
     }
 
     type Subscription {
-        newFollower(username: String): FollowerGetIt
+        newFollower(username: String!): FollowerGetIt
+        newPublication(username: String!):  PublicationsGetiT
     }
-`
+`   
 
 module.exports = typeDefs
