@@ -1,5 +1,5 @@
 const { PubSub, withFilter } = require("apollo-server");
-const { NEW_FOLLOWER, NEW_PUBLICATION } = require("./tags");
+const { NEW_FOLLOWER, NEW_PUBLICATION, NEW_COMMENT } = require("./tags");
 const userController = require("../controllers/user");
 const followController = require("../controllers/follow");
 const publicationController = require("../controllers/publication");
@@ -45,7 +45,7 @@ const resolver = {
 
     //Comments
     addComment: (_, { input }, ctx) =>
-      commentsController.addComment(input, ctx),
+      commentsController.addComment(input, ctx, pubSub),
   },
   Subscription: {
     newFollower: {
@@ -75,6 +75,13 @@ const resolver = {
       subscribe: withFilter(
         () => pubSub.asyncIterator([NEW_PUBLICATION]),
         (payLoad, args) => payLoad.newPublication.username === args.username
+      ),
+    },
+    newComment: {
+      subscribe: withFilter(
+        () => pubSub.asyncIterator([NEW_COMMENT]),
+        (payLoad, args) =>
+          payLoad.newComment[0].idPublication.toString() === args.id
       ),
     },
   },

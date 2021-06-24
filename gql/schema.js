@@ -118,6 +118,7 @@ const typeDefs = gql`
   type Subscription {
     newFollower(username: String!): FollowerGetIt
     newPublication(username: String!): PublicationsGetiT
+    newComment(id: ID): [Comment]
   }
 `;
 

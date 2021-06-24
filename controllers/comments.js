@@ -1,6 +1,11 @@
+const { NEW_COMMENT } = require("../gql/tags");
 const Comment = require("../models/comments");
 
-async function addComment({ idPublication, comment: commentInput }, { user }) {
+async function addComment(
+  { idPublication, comment: commentInput },
+  { user },
+  pubSub
+) {
   try {
     const comment = new Comment({
       idPublication,
@@ -9,6 +14,8 @@ async function addComment({ idPublication, comment: commentInput }, { user }) {
     });
 
     comment.save();
+    const comments = await getComments(idPublication);
+    pubSub.publish(NEW_COMMENT, { newComment: comments });
     return comment;
   } catch (e) {
     console.log(e);
