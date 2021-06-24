@@ -51,6 +51,8 @@ const resolver = {
     //Likes
     addLike: (_, { idPublication }, ctx) =>
       likeController.addLike(idPublication, ctx),
+    deleteLike: (_, { idPublication }, ctx) =>
+      likeController.deleteLike(idPublication, ctx),
   },
   Subscription: {
     newFollower: {

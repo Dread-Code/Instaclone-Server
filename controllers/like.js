@@ -15,6 +15,19 @@ async function addLike(idPublication, ctx) {
   }
 }
 
+async function deleteLike(idPublication, ctx) {
+  try {
+    await Like.findOneAndDelete({ idPublication })
+      .where("idUser")
+      .equals(ctx.user.id);
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
 module.exports = {
   addLike,
+  deleteLike,
 };
