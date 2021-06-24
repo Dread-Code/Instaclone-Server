@@ -29,6 +29,8 @@ const resolver = {
     //Likes
     isLike: (_, { idPublication }, ctx) =>
       likeController.isLike(idPublication, ctx),
+    countLikes: (_, { idPublication }) =>
+      likeController.countLikes(idPublication),
   },
   Mutation: {
     //User

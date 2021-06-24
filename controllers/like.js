@@ -40,8 +40,19 @@ async function isLike(idPublication, ctx) {
   }
 }
 
+async function countLikes(idPublication) {
+  try {
+    const result = await Like.countDocuments({ idPublication });
+
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports = {
   addLike,
   deleteLike,
   isLike,
+  countLikes,
 };
