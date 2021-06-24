@@ -21,6 +21,9 @@ const resolver = {
     //Publication
     getPublications: (_, { username }) =>
       publicationController.getPublications(username),
+
+    //Comments
+    getComments: (_, { id }) => commentsController.getComments(id),
   },
   Mutation: {
     //User

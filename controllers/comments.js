@@ -15,6 +15,16 @@ async function addComment({ idPublication, comment: commentInput }, { user }) {
   }
 }
 
+async function getComments(id) {
+  let comments = await Comment.find({ idPublication: id })
+    .sort({
+      createdAt: -1,
+    })
+    .populate("idUser");
+  return comments;
+}
+
 module.exports = {
   addComment,
+  getComments,
 };
