@@ -1,12 +1,13 @@
 const Like = require("../models/like");
+const { NEW_LIKE } = require("../gql/tags");
 
-async function addLike(idPublication, ctx) {
+async function addLike(idPublication, ctx, pubSub) {
   try {
     const like = new Like({
       idPublication,
       idUser: ctx.user.id,
     });
-
+    pubSub.publish(NEW_LIKE, { newLike: { like: 1, idPublication } });
     like.save();
     return true;
   } catch (error) {
@@ -15,11 +16,12 @@ async function addLike(idPublication, ctx) {
   }
 }
 
-async function deleteLike(idPublication, ctx) {
+async function deleteLike(idPublication, ctx, pubSub) {
   try {
     await Like.findOneAndDelete({ idPublication })
       .where("idUser")
       .equals(ctx.user.id);
+    pubSub.publish(NEW_LIKE, { newLike: { like: -1, idPublication } });
     return true;
   } catch (error) {
     console.log(error);
@@ -29,10 +31,10 @@ async function deleteLike(idPublication, ctx) {
 
 async function isLike(idPublication, ctx) {
   try {
-    let like = await Like.findOne({ idPublication })
+    const result = await Like.findOne({ idPublication })
       .where("idUser")
       .equals(ctx.user.id);
-    if (!like) throw new Error("No le ha dado a like");
+    if (!result) return false;
     return true;
   } catch (error) {
     console.log(error);

@@ -1,5 +1,10 @@
 const { PubSub, withFilter } = require("apollo-server");
-const { NEW_FOLLOWER, NEW_PUBLICATION, NEW_COMMENT } = require("./tags");
+const {
+  NEW_FOLLOWER,
+  NEW_PUBLICATION,
+  NEW_COMMENT,
+  NEW_LIKE,
+} = require("./tags");
 const userController = require("../controllers/user");
 const followController = require("../controllers/follow");
 const publicationController = require("../controllers/publication");
@@ -56,9 +61,9 @@ const resolver = {
 
     //Likes
     addLike: (_, { idPublication }, ctx) =>
-      likeController.addLike(idPublication, ctx),
+      likeController.addLike(idPublication, ctx, pubSub),
     deleteLike: (_, { idPublication }, ctx) =>
-      likeController.deleteLike(idPublication, ctx),
+      likeController.deleteLike(idPublication, ctx, pubSub),
   },
   Subscription: {
     newFollower: {
@@ -96,6 +101,13 @@ const resolver = {
         (payLoad, args) =>
           payLoad.newComment[0].idPublication.toString() === args.id
       ),
+    },
+    newLike: {
+      subscribe: withFilter(
+        () => pubSub.asyncIterator([NEW_LIKE]),
+        (payLoad, args) => payLoad.newLike.idPublication === args.idPublication
+      ),
+      resolve: (payLoad) => payLoad.newLike.like,
     },
   },
 };

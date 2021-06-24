@@ -127,6 +127,7 @@ const typeDefs = gql`
     newFollower(username: String!): FollowerGetIt
     newPublication(username: String!): PublicationsGetiT
     newComment(id: ID): [Comment]
+    newLike(idPublication: ID!): Int
   }
 `;
 
