@@ -113,6 +113,9 @@ const typeDefs = gql`
 
     #Comments
     addComment(input: CommentInput): Comment
+
+    #Likes
+    addLike(idPublication: ID!): Boolean
   }
 
   type Subscription {

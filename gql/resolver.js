@@ -4,6 +4,7 @@ const userController = require("../controllers/user");
 const followController = require("../controllers/follow");
 const publicationController = require("../controllers/publication");
 const commentsController = require("../controllers/comments");
+const likeController = require("../controllers/like");
 
 const pubSub = new PubSub();
 
@@ -46,6 +47,10 @@ const resolver = {
     //Comments
     addComment: (_, { input }, ctx) =>
       commentsController.addComment(input, ctx, pubSub),
+
+    //Likes
+    addLike: (_, { idPublication }, ctx) =>
+      likeController.addLike(idPublication, ctx),
   },
   Subscription: {
     newFollower: {
