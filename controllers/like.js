@@ -27,7 +27,21 @@ async function deleteLike(idPublication, ctx) {
   }
 }
 
+async function isLike(idPublication, ctx) {
+  try {
+    let like = await Like.findOne({ idPublication })
+      .where("idUser")
+      .equals(ctx.user.id);
+    if (!like) throw new Error("No le ha dado a like");
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
 module.exports = {
   addLike,
   deleteLike,
+  isLike,
 };

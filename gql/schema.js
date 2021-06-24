@@ -94,6 +94,9 @@ const typeDefs = gql`
 
     #Comments
     getComments(id: ID): [Comment]
+
+    #Like
+    isLike(idPublication: ID!): Boolean
   }
 
   type Mutation {
