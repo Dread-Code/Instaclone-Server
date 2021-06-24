@@ -3,6 +3,7 @@ const { NEW_FOLLOWER, NEW_PUBLICATION } = require("./tags");
 const userController = require("../controllers/user");
 const followController = require("../controllers/follow");
 const publicationController = require("../controllers/publication");
+const commentsController = require("../controllers/comments");
 
 const pubSub = new PubSub();
 
@@ -38,6 +39,10 @@ const resolver = {
     //Publication
     publish: (_, { file }, ctx) =>
       publicationController.publish(file, ctx, pubSub),
+
+    //Comments
+    addComment: (_, { input }, ctx) =>
+      commentsController.addComment(input, ctx),
   },
   Subscription: {
     newFollower: {

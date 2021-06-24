@@ -45,6 +45,13 @@ const typeDefs = gql`
     createdAt: String
   }
 
+  type Comment {
+    idPublication: ID
+    idUser: ID
+    comment: String
+    createdAt: String
+  }
+
   input UserInput {
     name: String!
     username: String!
@@ -65,6 +72,11 @@ const typeDefs = gql`
     newPassword: String
     siteWeb: String
     description: String
+  }
+
+  input CommentInput {
+    idPublication: ID
+    comment: String
   }
 
   type Query {
@@ -95,6 +107,9 @@ const typeDefs = gql`
 
     #Publication
     publish(file: Upload): Publish
+
+    #Comments
+    addComment(input: CommentInput): Comment
   }
 
   type Subscription {
